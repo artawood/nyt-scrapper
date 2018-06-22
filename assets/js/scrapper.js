@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
 
     const APIURL = "http://api.nytimes.com/svc/search/v2/articlesearch.json?";
     const APIKEY = "df2ccef3827e48ef9a65253c142c74d1";
@@ -8,22 +8,41 @@ $(document).ready(function() {
     var startYear;
     var endYear;
 
-    $(".search").on("click", function() {
+    $("option").on("click", function (event) {
+        event.preventDefault();
+        $(this).attr("selected", "selected");
+    })
 
+    $("select")
+        .change(function () {
+            var str = "";
+            $("select option: selected").each(function () {
+                str += $(this).text() + " ";
+            });
+            $("div").text(str);
+        })
+        .trigger("change");
+
+    $(".search").on("click", function (event) {
+        event.preventDefault();
         searchTerm = $("#search-term").val().trim();
         let selector = $("#record-retrieve");
-        selector.options[selector.selectedIndex].text();
+        numRecord = selector.options[selector.selectedIndex].text();
+        startYear = $("#start-year").val().trim();
+        endYear = $("#end-year").val().trim();
+
+        console.log(`search term: ${searchTerm}, numRecord: ${numRecords}, start year: ${startYear}, end year: ${endYear}`);
 
         let begin_date = startYear ? `&begin_date=${startYear}0101` : "";
         let end_date = endYear ? `&end_date=${endYear}1231` : "";
         $.ajax({
-            url : `${APIURL}q=${searchTerm}&api-key=${APIKEY}${begin_date}${end_date}`,
-            method : "GET",
-        }).done(function(response) {
+            url: `${APIURL}q=${searchTerm}&api-key=${APIKEY}${begin_date}${end_date}`,
+            method: "GET",
+        }).done(function (response) {
             console.log(response);
             displayResult(response, numRecords);
 
-        }).fail(function(response) {
+        }).fail(function (response) {
             console.log(response);
         })
     });
