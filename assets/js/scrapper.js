@@ -16,7 +16,7 @@ $(document).ready(function() {
             method : "GET",
         }).done(function(response) {
             console.log(response);
-
+            displayResult(response, numRecords);
 
         }).fail(function(response) {
             console.log(response);
@@ -24,8 +24,14 @@ $(document).ready(function() {
     });
 
 
-    function displayResult(obj) {
-        
+    function displayResult(obj, numRecords) {
+        let docList = obj.response.docs;
+        for (let i = 0; i < numRecords; i++) {
+            let currArticle = docList[i];
+            let headLine = currArticle.headline;
+            let pubDate = currArticle.pub_date;
+            let snippet = currArticle.snippet;
+        }
     }
 
 })
