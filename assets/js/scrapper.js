@@ -9,6 +9,11 @@ $(document).ready(function() {
     var endYear;
 
     $(".search").on("click", function() {
+
+        searchTerm = $("#search-term").val().trim();
+        let selector = $("#record-retrieve");
+        selector.options[selector.selectedIndex].text();
+
         let begin_date = startYear ? `&begin_date=${startYear}0101` : "";
         let end_date = endYear ? `&end_date=${endYear}1231` : "";
         $.ajax({
@@ -25,12 +30,19 @@ $(document).ready(function() {
 
 
     function displayResult(obj, numRecords) {
+        $(".results").empty();
         let docList = obj.response.docs;
-        for (let i = 0; i < numRecords; i++) {
+        for (let i = 0; i < numRecords && i < docList.length; i++) {
             let currArticle = docList[i];
             let headLine = currArticle.headline;
             let pubDate = currArticle.pub_date;
             let snippet = currArticle.snippet;
+
+            let div = $("<div>");
+            div.addClass("bg-secondary");
+            div.append(`<h2>${headLine}</h2>`);
+            div.append(`<p>${snippet}</p>`);
+            div.append(`<p><small>${pubDate}</small></p>`);
         }
     }
 
